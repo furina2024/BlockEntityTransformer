@@ -255,13 +255,13 @@ class palette:
         ]
         with open("defaultstructs/palette.mcstructure", "rb") as f:
 	        self.struct = Structure.load(f)
-    
+
     def getBlockbyID(self,id):
         try:
             return self.struct.get_block((id%64,0,int(id/64)))
         except IndexError:
             print("index out of range:getblockbyid()")
-    
+
     def getBlockbyName(self,name):
         for i in range(len(self.formatted_block_ids)):
             block=self.getBlockbyID(i)
@@ -269,11 +269,11 @@ class palette:
                 if block.base_name==name:
                     return block
         return False
-    
+
     def searchBlocks(self,name):
         name_lower = name.lower()
         return [item for item in self.formatted_block_ids if name_lower in item.lower()]
-    
+
     def createMbEntity(self,name,states,extra,extrastate):
         mb=defaultMb()
         mba=mb.defaultMba
@@ -282,7 +282,3 @@ class palette:
         mba["movingBlockExtra"]["name"]=extra
         mba["movingBlockExtra"]["states"]=extrastate
         return mba
-
-        
-    
-
