@@ -1,17 +1,16 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget,QMessageBox,QFileDialog,QTableWidgetItem,QTreeWidgetItem,QGraphicsScene
-import sys
-import os
 from PyQt5.QtCore import Qt,QPointF
 from creater import creater,mover
 from palette import palette
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-import numpy as np
 from TrimMCStruct import Block
-
+import sys
+import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 class window(QWidget):
     def __init__(self):
@@ -64,8 +63,7 @@ class window(QWidget):
         full_path = os.path.join(file_path, file_name)
         self.selectedStruct.save(full_path)
         QMessageBox.information(None, "提示", "成功保存")
-       
-    
+
     def moverpage(self):
         self.moverPage.show()
         self.moverPage.structList.clear()
@@ -78,7 +76,6 @@ class window(QWidget):
         for c in self.creaters:
             self.mergeinpage.structList.addItem(c.base_name)
 
-    
     def mergePage(self):
         self.mergepage.show()
         self.mergepage.structList.clear()
@@ -106,7 +103,7 @@ class window(QWidget):
         Creater=creater(file_path,os.path.basename(file_path),readMode)
         Creater.main()
         self.creaters.append(Creater)
-    
+
     def editor_clicked(self):
         for i in range(len(self.creaters)):
             if str(self.creaters[i].base_name).strip()==str(self.editor.selected).strip():
@@ -115,21 +112,16 @@ class window(QWidget):
                 
         self.editor.show()
 
-
-
     def updateIoShower(self,io):
         self.ui.ioShower.clear()
         self.ui.ioShower.setPlainText(io)
 
-        
 class introWindow(QWidget):
     def __init__(self,mainwindow):
         super().__init__()
         self.ui=uic.loadUi("UI/intro.ui",self)
 
-
 class structeditor_Window(QWidget):
-
 
     def __init__(self,mainwindow):
         self.addItem_blocksearcher=False
@@ -239,7 +231,6 @@ class structeditor_Window(QWidget):
             tree_dict[top_item.text(0)] = item_to_dict(top_item)
         return tree_dict
 
-
 class mergePage(QWidget):
     def __init__(self,mainwindow,mergetype):
         super().__init__()
@@ -253,7 +244,6 @@ class mergePage(QWidget):
         self.delButton.clicked.connect(self.delstruct)
         self.creaters=[]
         self.tableRow=0
-        
 
     def addStruct_(self):
         struct = self.ui.structList.currentText()
@@ -264,7 +254,7 @@ class mergePage(QWidget):
             if str(self.mainwindow.creaters[i].base_name).strip()==str(self.structList.currentText()).strip():
                 self.creaters.append(self.mainwindow.creaters[i])
                 break
-        
+
     def save(self):
         if self.creaters!=[]:
             if self.mergeType=="merge":
@@ -332,7 +322,6 @@ class moverPage(QWidget):
         self.setX.clear()
         self.setY.clear()
         self.setZ.clear()
-        
 
     def plot_3d(self,path):
         if path==None:
@@ -360,14 +349,9 @@ class moverPage(QWidget):
         if self.ax!=None:
             self.ax.cla()
 
-
-
-
-        
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window=window()
     window.show()
-    
 
     sys.exit(app.exec_())

@@ -10,17 +10,13 @@ class defaultMb:
         self.defaultMba["x"]=2
         self.defaultMba["y"]=2
         self.defaultMba["z"]=2
-        
-    
+
     def setPisPos(self,coord):
         self.defaultMba["pistonPosX"],self.defaultMba["pistonPosY"],self.defaultMba["pistonPosZ"]=coord
-    
+
     def setMbablock(self,Block):
         self.defaultMba["movingBlock"]=Block
-    
+
     def getPis(self,dir):
         dirList=[(0,2,0),(0,2,2),(2,0,2),(2,0,0),(0,0,2),(0,0,0)]
         return dirList[dir]
-
-
-    

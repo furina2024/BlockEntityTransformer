@@ -1,18 +1,17 @@
 from TrimMCStruct import Block, Structure
 from defaultMb import defaultMb
 from structReader import Reader
+from palette import palette
+from scipy.interpolate import splprep, splev
+import copy
 import sys
 import os
-from palette import palette
-import copy
-from scipy.interpolate import splprep, splev
 import numpy as np
-
 
 class creater:
 
     palette=palette()
-    
+
     @classmethod
     def getBlock(cls,id):
         return cls.palette.getBlockbyID(id)
@@ -32,8 +31,7 @@ class creater:
         nextMb.setPisPos(nextMb.getPis(self.blockList[-index-1][1]))
         nextMb.defaultMba["movingEntity"]=self.create(index+1)
         return nextMb.defaultMba
-    
-    
+
     def __init__(self,io,base_name,type="最小路径遍历解析",size=(3,3,3)):
         self.reader=Reader(io)
         if io and os.path.isfile(io):
@@ -60,7 +58,7 @@ class creater:
     def save(self,io):
         with open(io, "wb") as f:
 	        self.struct.dump(f)
-    
+
     def getLayer(self,deepth):
         if deepth>len(self.blockList):
             return None
@@ -74,7 +72,7 @@ class creater:
         except TypeError:
             pass
         return layer
-    
+
     def getChgLayer(self,deepth):
         if deepth>len(self.blockList):
             return None
@@ -84,7 +82,7 @@ class creater:
         for i in range(deepth):
             layer=getnextlayer(layer)
         return layer
-    
+
     def setLayer(self,deepth,name,states,extraname,extrastate):
         preLayer=self.getChgLayer(deepth)
         if preLayer==None:
@@ -94,14 +92,13 @@ class creater:
         preLayer["movingBlockExtra"]["name"]=extraname
         preLayer["movingBlockExtra"]["states"]=extrastate
 
-
     def mergeWithPis(self,creaters):
         newCreater=creater(None,"mergedStruct")
         for c in creaters:
             newCreater.blockList+=c.blockList
         newCreater.main()
         return newCreater
-    
+
     def merge(self,creaters):
         newCreater=creater(None,"mergedStruct")
         newCreater.struct=Structure((64,3,3))
@@ -129,9 +126,6 @@ class creater:
             i+=1
         return newCreater
 
-
-         
-    
 class mover(creater):
     def __init__(self,io, creater,base_name="movedStruct",type="minPath", size=(3, 3, 3)):
         super().__init__(io, type, size)
@@ -150,7 +144,7 @@ class mover(creater):
 
         new_points = splev(np.linspace(0,1, pointNum), tck)
         return new_points
-    
+
     def savePath(self,path):
         if path==None:
             return
@@ -170,10 +164,6 @@ class mover(creater):
                 for z in range(3):
                     self.struct.set_block((x,y,z),self.mb.struct.get_block((x,y,z)))
 
-        
-
-
-
     def save_(self,index):
         if index>=len(self.blockList) or index>600:
             return self.creater.struct._special_blocks[26]["block_entity_data"]
@@ -191,19 +181,3 @@ class mover(creater):
         nextMb.defaultMba["pistonPosZ"]=0
         nextMb.defaultMba["movingEntity"]=self.save_(index+1)
         return nextMb.defaultMba
-        
-
-
-             
-        
-
-        
-        
-
-
-    
-    
-
-    
-
-
