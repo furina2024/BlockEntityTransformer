@@ -1,41 +1,41 @@
 ## MCDA——Minecraft Dynamic Architect
 
-**——为原版动画建筑设计的结构编辑器**
+**————Structure Editor for Vanilla Animated Architecture**
 
-作者：[奈茶泡芙](https://github.com/furina2024)
+Author：[奈茶泡芙](https://github.com/furina2024)
 
-### 前言：什么是动态建筑
+Introduction: What is Dynamic Architecture?
 
-在基岩版我的世界里，方块移动时会变成 movingblock，简称 mb，并在这个状态下保持 2gt。这两 gt 里，方块的所有信息会被记录在 mb 的方块实体里（游戏中记录方块特殊信息的一个容器）。
+In Minecraft Bedrock Edition, when a block moves, it transforms into a movingblock (commonly referred to as mb) and remains in this state for 2 game ticks. During these 2 ticks, all information about the block is stored in the block entity of the mb, which acts as a container for storing special block information in the game.
 
-相信有足够游戏经历的玩家都会发现，方块在移动的时候也是会正常显示的。这意味着，即使方块不存在于世界上了，它被记录到了一个 mb 里面，mb 的方块实体里面，就能正常显示。这说明，方块可以通过 mb 的方块实体去显示。
+Players with enough gameplay experience may notice that blocks continue to render normally while moving. This indicates that even when a block is no longer present in the world, it can still be displayed through the mb block entity. This means a block’s appearance is rendered via its mb block entity.
 
-mb 方块实体中记录的方块在游戏中显示的位置是由活塞（mb 方块实体里会记录一个活塞的位置）决定的。活塞朝哪个方向，记录的方块就能在那个方向根据活塞的伸缩状态移动一格。这为动态建筑奠定了基础。
+The position where the block recorded in the mb block entity is displayed in the game is determined by the piston (the position of the piston is recorded in the mb block entity). The block moves one block in the direction of the piston’s push or pull, depending on its state. This principle forms the foundation for dynamic architecture.
 
-另一个重要的特性是 mb 的可嵌套性。mb 的方块实体内部会记录自己移动的方块实体，这个方块实体可以为 mb 再记录一个方块。当渲染时，这个渲染会形成一个类似递归的东西层层渲染下去。
+Another key feature is the nesting capability of mb. The block entity of an mb can record another mb block entity, which can further record another block. During rendering, this process forms a recursive-like structure that layers and renders blocks sequentially.
 
-这整个过程是可以在纯生存中做出来的（很复杂），不过本编辑器主要面向创造建筑玩家，在此就不赘述了。
+This entire process can be achieved in pure survival mode (though it’s highly complex). However, this editor is primarily aimed at creative players, so survival-specific details are omitted.
 
-### 功能 1：结构转换
+Feature 1: Structure Conversion
+In this editor, click "Import Structure" to select the structure file you want to convert (it must be an .mcstructure file). After clicking "Import Structure," the file will be converted into a nested mb block entity format. You can then click "Export Structure" to select a folder and export a basic "mb projection." This projection consists of a piece of glass containing the mb block entity and a set of pistons that control its direction. Activating all pistons and moving the glass will reveal the expanded projection.
 
-本编辑器中点击导入结构选中你想要转换的结构文件（必须是 mcstructure 文件），点击导入结构，导入进来就转换成了 mb 方块实体的嵌套形式。这时点导出结构选择一个文件夹就能导出一个基本的“mb 投影”，它由一个含 mb 方块实体的玻璃和一组控制它方向的活塞组成，激活全部活塞并移动玻璃就可以看到展开的投影。如果想要投影一直显示，可以在保存时点击“保留为 MB”，但这会使投影的位置受限制（玻璃可以移动到任何位置再变成 mb，但是一开始就是 mb 就不行了）。也可以通过几种原版的保留 mb 的方法
+If you want the projection to remain visible, you can save it by selecting "Save as MB," but this will restrict the projection’s initial position (the glass can be moved anywhere to become an mb, but starting as an mb locks its position). You can also use certain vanilla methods to preserve the mb.
 
-要注意的是，左上角的“设置解析模式”里面规定了你要以什么方式去解析结构。“最小路径解析”程序会寻找一条最小的能连接起所有方块的线并生成 mb 嵌套结构，这能最大程度的利用空间（一个 mb 最多嵌套 600 个左右，再多会因为太多渲染同时进行而崩掉游戏）但是线段会很不规则。“全位置遍历解析”会遍历整个结构的长方形范围。
+Note: In the top-left corner, the "Set Parsing Mode" option defines how the structure will be parsed.
 
-### 功能 2：编辑结构
+"Minimal Path Parsing" searches for the shortest path that connects all blocks and generates a nested mb structure, maximizing space efficiency (one mb can nest up to 600 blocks; exceeding this may crash the game due to rendering overload). However, the lines may appear irregular.
+"Full Position Traversal Parsing" traverses the entire rectangular range of the structure.
+Feature 2: Edit Structure
+Select a structure you want to edit from the table and click "Edit Structure" to open the editing window. Enter the depth you want to edit (for nested mb, depth corresponds to the specific block layer) at the top. In the block search bar, search for a block's English name to retrieve its NBT template. You can edit the values by clicking on the tree diagram. Once finished, click "Save."
 
-点选一个你想要编辑的结构（从表格里），点击进编辑结构窗口。在上面输入你想要编辑的深度（mb 套娃，编辑第几层就是第几个方块），在下方搜索方块栏中搜索一个方块的英文名以获取方块 NBT 模板，点击树状图上的值就可以编辑。编辑完了保存
+Feature 3: Merge Structures
+This feature allows you to merge multiple nested mb structures into one, controlled by multiple sets of pistons for different structures, even after merging. Use the dropdown menu to select the structures you want to merge, click "+," and then save to complete the merge.
 
-### 功能 3：合并结构
+Feature 4: Nest Structures
+This works similarly to merging structures, but after merging, the resulting structure is controlled by a single set of pistons rather than multiple sets.
 
-这个功能能实现将多个 mb 嵌套结构合并在一起，并由多组不同的活塞控制多个不同的结构（即使合并在了一起）。在下面的拉选栏里选择想要合并的结构点“+”，然后点击保存便可合并
+Feature 5: Move Structures
+In the "Move Structure" window, select the structure you want to move. In the right-hand input field, enter the 3D coordinates of the points the building’s movement path passes through. The program will generate a curve connecting these points. Click "Save" to finalize the movement path.
 
-### 功能 4：嵌套结构
-
-这个功能的操作和合并结构一样，区别在于合并完的结构由统一的一组活塞控制，而不是多组
-
-### 功能 5：移动结构
-
-点进“移动结构”窗口，选择你要移动的结构。在右边的输入采样点栏中输入建筑移动轨迹经过的点的三维坐标，程序会生成一条曲线将你输入的点连接起来，点击保存即可。
-
-导出结构注意事项：如果结构嵌套超过了 600 层（也就是 600 个方块），后面的结构会自动被删掉，防止游戏崩溃
+Exporting Structures: Important Notes
+If the structure contains more than 600 nested layers (i.e., 600 blocks), any excess blocks will automatically be deleted to prevent the game from crashing.
